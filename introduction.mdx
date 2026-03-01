@@ -1,0 +1,76 @@
+---
+title: Introduction
+description: Automate your entire git workflow with one command using AI-powered commit messages
+---
+
+# Introduction
+
+YitPush is an AI-powered Git commit tool that automates your entire git workflow with a single command. Using DeepSeek's reasoning AI, it analyzes your changes, generates meaningful commit messages, and pushes everything automatically.
+
+```bash
+yitpush commit
+```
+
+That's it. YitPush handles staging, committing with an intelligent message, and pushing to your remote repository.
+
+## Why use YitPush?
+
+YitPush replaces the repetitive `git add . && git commit -m "..." && git push` workflow with intelligent automation that understands your code changes.
+
+<CardGroup cols={2}>
+  <Card title="AI-powered commits" icon="robot">
+    Uses DeepSeek's reasoning model to generate contextual, conventional commit messages
+  </Card>
+  <Card title="One-command workflow" icon="bolt">
+    Replaces `git add . && git commit -m "..." && git push` with a single command
+  </Card>
+  <Card title="Multi-language support" icon="globe">
+    Generate commit messages in any language with `--language`
+  </Card>
+  <Card title="Detailed commits" icon="clipboard-list">
+    Create title + body + bullet points with `--detailed`
+  </Card>
+  <Card title="Branch management" icon="code-branch">
+    Interactive branch switcher with `yitpush checkout`
+  </Card>
+  <Card title="PR descriptions" icon="pull-request">
+    AI-generated pull request descriptions with `yitpush pr`
+  </Card>
+  <Card title="Azure DevOps integration" icon="cloud">
+    Create/clone repos and browse variable groups
+  </Card>
+  <Card title="Cross-platform" icon="earth-americas">
+    Full support for macOS, Linux, and Windows with Unicode/emoji support
+  </Card>
+</CardGroup>
+
+## Key features
+
+### Smart commit messages
+
+YitPush analyzes your staged, unstaged, and untracked changes to generate conventional commit messages that accurately describe what changed and why.
+
+### Flexible workflows
+
+- **Automatic mode**: Commit and push immediately
+- **Confirmation mode**: Review the AI-generated message before committing with `--confirm`
+- **Detailed mode**: Generate commits with title, body, and bullet points using `--detailed`
+- **Multilingual**: Generate messages in any language with `--language`
+
+### Beyond commits
+
+YitPush isn't just for commits:
+- **Branch checkout**: Interactive branch switching with date sorting
+- **PR descriptions**: Generate comprehensive pull request descriptions
+- **Azure DevOps**: Manage repositories and variable groups
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install YitPush in seconds with .NET tools
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Get from zero to your first AI commit in under 2 minutes
+  </Card>
+</CardGroup>

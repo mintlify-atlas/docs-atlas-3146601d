@@ -1,0 +1,298 @@
+---
+title: Examples
+description: Real-world usage examples and workflows for YitPush
+---
+
+This guide demonstrates common YitPush workflows and how to combine different options for various use cases.
+
+## Basic commit workflow
+
+### Auto commit and push
+
+The simplest way to use YitPush - automatically stage, commit, and push all changes:
+
+```bash
+yitpush commit
+```
+
+YitPush will:
+1. Analyze your git changes
+2. Generate a conventional commit message using AI
+3. Stage all changes with `git add .`
+4. Commit with the generated message
+5. Push to your remote repository
+
+### Review before committing
+
+If you want to review the AI-generated message before committing:
+
+```bash
+yitpush commit --confirm
+```
+
+You'll be prompted to approve the commit message. Type `y` or `yes` to proceed, or `n` to cancel.
+
+## Detailed commit messages
+
+### Generate commit with title and body
+
+For more comprehensive commit messages that include a detailed body with bullet points:
+
+```bash
+yitpush commit --detailed
+```
+
+This generates a commit message with:
+- A concise title following conventional commit format
+- A detailed body explaining the changes
+- Bullet points for key modifications
+- Information about important files changed
+
+### Save commit message to file
+
+To save the generated commit message as a markdown file:
+
+```bash
+yitpush commit --save
+```
+
+The message will be saved as `commit-message-YYYYMMDD-HHmmss.md`.
+
+## Multi-language support
+
+### Commit in Spanish
+
+```bash
+yitpush commit --language spanish
+```
+
+Or use the short form:
+
+```bash
+yitpush commit --lang es
+```
+
+### Commit in French
+
+```bash
+yitpush commit --language french
+```
+
+### Other languages
+
+YitPush supports any language. Simply specify the language name:
+
+```bash
+yitpush commit --lang german
+yitpush commit --lang japanese
+yitpush commit --lang portuguese
+```
+
+## Combining options
+
+### Detailed Spanish commit with confirmation
+
+```bash
+yitpush commit --detailed --lang es --confirm
+```
+
+This will:
+1. Generate a detailed commit message in Spanish
+2. Show you the message for review
+3. Ask for confirmation before committing
+
+### Detailed commit with save
+
+```bash
+yitpush commit --detailed --save
+```
+
+Generate a detailed message and save it to a file for your records.
+
+## Branch management
+
+### Interactive branch checkout
+
+Switch between branches with an interactive menu:
+
+```bash
+yitpush checkout
+```
+
+This command:
+- Fetches all remote branches
+- Shows local and remote branches sorted by last commit date
+- Displays branch type and last modified date
+- Allows you to select and checkout a branch interactively
+- Automatically pulls latest changes after checkout
+
+<Note>
+  Use the `← Back` option to cancel the checkout operation.
+</Note>
+
+## Pull request workflows
+
+### Generate basic PR description
+
+```bash
+yitpush pr
+```
+
+Interactively select source and target branches to generate a PR description with:
+- A concise PR title
+- A summary of changes
+- Key bullet points
+
+### Detailed PR description
+
+```bash
+yitpush pr --detailed
+```
+
+Generates a comprehensive PR description including:
+- Title in conventional commit style
+- Overall summary of the changes
+- Categorized bullet list (features, fixes, refactoring)
+- List of key files changed
+- Testing suggestions
+- Migration notes or breaking changes (if applicable)
+
+### PR description in different language
+
+```bash
+yitpush pr --detailed --lang french
+```
+
+### Save PR description to file
+
+```bash
+yitpush pr --detailed --save
+```
+
+The description will be saved as `pr-description-[source]-to-[target].md`.
+
+### All PR options combined
+
+```bash
+yitpush pr --detailed --language spanish --save
+```
+
+## Azure DevOps workflows
+
+<Warning>
+  Azure DevOps commands require the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) to be installed and you must be logged in with `az login`.
+</Warning>
+
+### Create a new repository
+
+```bash
+yitpush azure-devops repo new
+```
+
+This interactive command:
+- Auto-detects your Azure DevOps organizations
+- Prompts you to select a project
+- Suggests the current directory name as the repo name
+- Creates the repository
+- Adds it as a git remote
+
+### Clone an existing repository
+
+```bash
+yitpush azure-devops repo checkout
+```
+
+Interactively browse and clone Azure DevOps repositories:
+- Select organization and project
+- Choose from available repositories
+- Automatically clones to a local directory
+
+### Browse variable groups
+
+```bash
+yitpush azure-devops variable-group list
+```
+
+List and inspect Azure DevOps pipeline variable groups.
+
+## Example workflow
+
+Here's a complete example workflow showing how YitPush simplifies your development process:
+
+```bash
+# Make your code changes
+# ...
+
+# Generate and push a detailed commit in Spanish
+yitpush commit --detailed --lang es --confirm
+
+# Output:
+# 🚀 YitPush - AI-Powered Git Commit Tool
+# 
+# 📊 Analyzing git changes...
+# Found changes (1234 characters)
+# 
+# 🤖 Generating commit message with DeepSeek Reasoning... (detailed mode)
+# 
+# 📝 Generated commit message:
+#    "feat: agregar autenticación de usuario con tokens JWT
+#    
+#    Se implementa un sistema completo de autenticación basado en JWT.
+#    Los usuarios ahora pueden iniciar sesión y recibir tokens seguros.
+#    
+#    - Añadido middleware de autenticación JWT
+#    - Creado endpoint /api/auth/login
+#    - Implementada validación de tokens"
+# 
+# ✅ Copied to clipboard
+# 
+# Do you want to proceed with this commit? (y/n): y
+# 
+# ⚙️  Executing git commands...
+#    git add .
+#    git commit
+#    git push
+# 
+# ✅ Successfully committed and pushed changes!
+
+# Later, create a PR
+yitpush pr --detailed --save
+```
+
+## Tips and best practices
+
+<AccordionGroup>
+  <Accordion title="When to use --detailed">
+    Use `--detailed` for:
+    - Complex features with multiple changes
+    - Commits that affect many files
+    - Changes that need documentation
+    - Public repositories where commit history matters
+    
+    Skip `--detailed` for:
+    - Small bug fixes
+    - Quick typo corrections
+    - Simple refactoring
+  </Accordion>
+  
+  <Accordion title="When to use --confirm">
+    Use `--confirm` when:
+    - You want to review the AI-generated message
+    - Working on critical production code
+    - Making changes to public repositories
+    - Learning how YitPush generates messages
+    
+    Skip `--confirm` for:
+    - Personal projects
+    - Rapid prototyping
+    - When you trust the AI completely
+  </Accordion>
+  
+  <Accordion title="Choosing the right language">
+    Use your team's preferred language for commits:
+    - International teams often use English
+    - Regional teams may prefer local languages
+    - Consider your git hosting platform's language support
+    - Ensure all team members can read the commits
+  </Accordion>
+</AccordionGroup>

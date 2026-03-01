@@ -1,0 +1,194 @@
+---
+title: 'yitpush checkout'
+description: 'Interactive branch checkout with automatic remote fetching'
+---
+
+The `yitpush checkout` command provides an interactive interface for switching git branches. It displays all local and remote branches with metadata, making it easy to navigate between branches.
+
+## Basic usage
+
+```bash
+yitpush checkout
+```
+
+## Features
+
+- **Automatic remote fetching**: Fetches all remote branches before displaying options
+- **Sorted by date**: Branches are ordered by last commit date (most recent first)
+- **Branch metadata**: Shows branch type (local/remote) and last modified date
+- **Interactive selection**: Use arrow keys to navigate and Enter to select
+- **Automatic pull**: Pulls latest changes after checkout
+- **Smart remote tracking**: Automatically handles remote branch checkout
+
+## Workflow example
+
+<Tabs>
+  <Tab title="Interactive selection">
+    ```bash
+    $ yitpush checkout
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    🔀 Interactive Branch Checkout
+
+    🔄 Fetching remote branches...
+    Current branch: main
+
+    📋 Select branch to checkout:
+    (Select ← Back to cancel)
+
+    > feature/new-api      local    2026-03-01 14:30
+      origin/develop       remote   2026-02-28 16:45
+      hotfix/bug-123       local    2026-02-27 09:15
+      origin/feature/auth  remote   2026-02-25 11:20
+      ← Back
+    ```
+  </Tab>
+
+  <Tab title="Local branch checkout">
+    When you select a local branch:
+
+    ```bash
+    ⚙️  Checking out feature/new-api...
+    ✅ Switched to branch 'feature/new-api'
+    🔄 Pulling latest changes...
+    Already up to date.
+    ```
+  </Tab>
+
+  <Tab title="Remote branch checkout">
+    When you select a remote branch:
+
+    ```bash
+    ⚙️  Checking out remote branch origin/feature/auth as feature/auth...
+    ✅ Switched to branch 'origin/feature/auth'
+    🔄 Pulling latest changes...
+    ```
+
+    The command automatically:
+    - Creates a local tracking branch
+    - Names it by removing the remote prefix (e.g., `origin/feature/auth` → `feature/auth`)
+    - Sets up tracking to the remote branch
+  </Tab>
+</Tabs>
+
+## Branch display format
+
+Each branch is displayed with the following information:
+
+```
+<branch-name>    <type>    <last-modified-date>
+```
+
+<ParamField path="branch-name" type="string">
+  The full name of the branch (e.g., `origin/main`, `feature/new-ui`)
+</ParamField>
+
+<ParamField path="type" type="string">
+  Either `local` or `remote` indicating where the branch exists
+</ParamField>
+
+<ParamField path="last-modified-date" type="string">
+  The date and time of the last commit in `YYYY-MM-DD HH:MM` format
+</ParamField>
+
+## How it works
+
+### Step 1: Fetch remote branches
+
+The command runs `git fetch --all --prune` to:
+- Fetch all remote branches
+- Remove references to deleted remote branches
+- Ensure you see the latest available branches
+
+<Info>
+  If fetching fails, the command continues with locally known branches and shows a warning.
+</Info>
+
+### Step 2: List branches
+
+Retrieves all branches using:
+```bash
+git branch -a --sort=-committerdate
+```
+
+This lists:
+- All local branches
+- All remote tracking branches
+- Sorted by most recent commit first
+
+### Step 3: Interactive selection
+
+Displays an interactive menu where you can:
+- Use arrow keys (↑/↓) to navigate
+- Press Enter to select a branch
+- Select "← Back" to cancel
+
+### Step 4: Checkout
+
+For **local branches**:
+```bash
+git checkout <branch-name>
+git pull
+```
+
+For **remote branches**:
+```bash
+git checkout -t <remote/branch-name>
+git pull
+```
+
+The `-t` flag creates a local tracking branch automatically.
+
+### Step 5: Fallback handling
+
+If a remote branch already has a local tracking branch, the command falls back to:
+```bash
+git checkout <local-branch-name>
+git pull
+```
+
+## Navigation
+
+<Note>
+  You can cancel the operation at any time by selecting "← Back" from the menu.
+</Note>
+
+## Requirements
+
+- Must be run from within a git repository
+- Git must be installed and configured
+- Remote repository must be accessible (for fetching)
+
+## Troubleshooting
+
+<Warning>
+  If you see "⚠️ Could not fetch remote branches", the command will still work with locally known branches. This usually means there's a network issue or the remote is not accessible.
+</Warning>
+
+### Common issues
+
+**No other branches found**
+```
+⚠️  No other branches found.
+```
+This means you only have one branch (the current one). Create or fetch more branches to use this command.
+
+**Could not pull latest changes**
+```
+⚠️  Could not pull latest changes.
+```
+The checkout succeeded, but pulling failed. This might happen if:
+- There's a merge conflict
+- The remote is not accessible
+- You have uncommitted changes that conflict with the pull
+
+You can manually resolve this with:
+```bash
+git status
+git pull
+```
+
+## Related commands
+
+- [yitpush commit](/commands/commit) - Commit and push changes
+- [yitpush pr](/commands/pr) - Generate pull request descriptions

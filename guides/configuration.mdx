@@ -1,0 +1,115 @@
+---
+title: Configuration
+description: Set up YitPush with your DeepSeek API key and configure it for your environment
+---
+
+YitPush requires a DeepSeek API key to generate AI-powered commit messages. This guide will walk you through getting your API key and configuring it for your operating system.
+
+## Get your DeepSeek API key
+
+<Steps>
+  <Step title="Create an account">
+    Sign up at [DeepSeek Platform](https://platform.deepseek.com/) if you don't already have an account.
+  </Step>
+  
+  <Step title="Generate API key">
+    Navigate to the API Keys section in your account dashboard and create a new API key.
+  </Step>
+  
+  <Step title="Save your key">
+    Copy the API key and save it securely. You'll need it for the next steps.
+  </Step>
+</Steps>
+
+## Set the environment variable
+
+YitPush reads your API key from the `DEEPSEEK_API_KEY` environment variable. Choose the setup method for your operating system and shell.
+
+<Tabs>
+  <Tab title="Linux/macOS (bash)">
+    **Temporary (current session only)**
+    ```bash
+    export DEEPSEEK_API_KEY='your-api-key-here'
+    ```
+
+    **Permanent (recommended)**
+    ```bash
+    echo 'export DEEPSEEK_API_KEY="your-api-key-here"' >> ~/.bashrc
+    source ~/.bashrc
+    ```
+  </Tab>
+  
+  <Tab title="Linux/macOS (zsh)">
+    **Temporary (current session only)**
+    ```zsh
+    export DEEPSEEK_API_KEY='your-api-key-here'
+    ```
+
+    **Permanent (recommended)**
+    ```zsh
+    echo 'export DEEPSEEK_API_KEY="your-api-key-here"' >> ~/.zshrc
+    source ~/.zshrc
+    ```
+  </Tab>
+  
+  <Tab title="Windows (PowerShell)">
+    **Temporary (current session only)**
+    ```powershell
+    $env:DEEPSEEK_API_KEY='your-api-key-here'
+    ```
+
+    **Permanent (recommended - run as Administrator)**
+    ```powershell
+    [System.Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'your-api-key-here', 'User')
+    ```
+    
+    <Note>
+      After setting the permanent variable, restart your PowerShell terminal to apply the changes.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Verify your setup
+
+To verify that your API key is configured correctly, run:
+
+<Tabs>
+  <Tab title="Linux/macOS">
+    ```bash
+    echo $DEEPSEEK_API_KEY
+    ```
+  </Tab>
+  
+  <Tab title="Windows (PowerShell)">
+    ```powershell
+    $env:DEEPSEEK_API_KEY
+    ```
+  </Tab>
+</Tabs>
+
+If the command outputs your API key, you're all set! If it's empty, double-check that you followed the permanent setup steps and restarted your terminal.
+
+## About the AI model
+
+YitPush uses the **deepseek-reasoner** model from DeepSeek to analyze your git changes and generate contextual commit messages. This model:
+
+- Supports up to 131,072 tokens of context (allowing for large diffs)
+- Generates conventional commit messages following best practices
+- Understands code structure and can create detailed explanations
+- Works with multiple programming languages and frameworks
+
+<Note>
+  The API requires an active internet connection. Make sure your network allows connections to `https://api.deepseek.com`.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Usage examples" icon="code" href="/guides/examples">
+    Learn how to use YitPush with real-world examples
+  </Card>
+  
+  <Card title="Troubleshooting" icon="wrench" href="/guides/troubleshooting">
+    Fix common issues and errors
+  </Card>
+</CardGroup>

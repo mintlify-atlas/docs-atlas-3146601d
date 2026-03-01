@@ -1,80 +1,174 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Get up and running with YitPush in under 2 minutes
 ---
 
-## Get started in three steps
+Get your first AI-powered commit done in minutes with YitPush.
 
-Get your documentation site running locally and make your first customization.
+<Steps>
+  <Step title="Install YitPush">
+    Install YitPush globally using the .NET CLI:
 
-### Step 1: Set up your local environment
+    ```bash
+    dotnet tool install --global YitPush
+    ```
+
+    <Tip>
+      To uninstall later: `dotnet tool uninstall --global YitPush`
+    </Tip>
+  </Step>
+
+  <Step title="Get your DeepSeek API key">
+    1. Sign up at [DeepSeek Platform](https://platform.deepseek.com/)
+    2. Navigate to **API Keys** and create a new key
+    3. Copy your API key for the next step
+  </Step>
+
+  <Step title="Set your API key">
+    Configure the `DEEPSEEK_API_KEY` environment variable:
+
+    <Tabs>
+      <Tab title="Linux/macOS">
+        ```bash
+        export DEEPSEEK_API_KEY='your-api-key-here'
+        
+        # Make it permanent
+        echo 'export DEEPSEEK_API_KEY="your-api-key-here"' >> ~/.zshrc
+        ```
+      </Tab>
+      <Tab title="Windows PowerShell">
+        ```powershell
+        $env:DEEPSEEK_API_KEY='your-api-key-here'
+        
+        # Make it permanent (run as Admin)
+        [System.Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'your-api-key-here', 'User')
+        ```
+      </Tab>
+    </Tabs>
+
+    <Warning>
+      Restart your terminal after setting the environment variable for it to take effect.
+    </Warning>
+  </Step>
+
+  <Step title="Make your first commit">
+    Navigate to any git repository and run:
+
+    ```bash
+    yitpush commit
+    ```
+
+    YitPush will:
+    - ✅ Analyze your staged, unstaged and untracked changes
+    - ✅ Generate a smart conventional commit message with DeepSeek AI
+    - ✅ Run `git add .`, `git commit` and `git push` automatically
+    - ✅ Copy the commit message to your clipboard
+
+    Example output:
+    ```
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    📊 Analyzing git changes...
+    Found changes (1234 characters)
+
+    🤖 Generating commit message with DeepSeek Reasoning...
+
+    📝 Generated commit message:
+       "feat: add user authentication with JWT tokens"
+
+    ⏩ Proceeding automatically (use --confirm to review)...
+
+    ⚙️  Executing git commands...
+       git add .
+       git commit -m "feat: add user authentication with JWT tokens"
+       git push
+
+    ✅ Successfully committed and pushed changes!
+    ```
+  </Step>
+</Steps>
+
+## Quick command reference
+
+<CardGroup cols={2}>
+  <Card title="Review before commit" icon="eye" href="/commands/commit">
+    ```bash
+    yitpush commit --confirm
+    ```
+    Review the AI-generated message before committing
+  </Card>
+  
+  <Card title="Detailed commits" icon="file-lines" href="/commands/commit">
+    ```bash
+    yitpush commit --detailed
+    ```
+    Generate commits with title and body
+  </Card>
+  
+  <Card title="Switch branches" icon="code-branch" href="/commands/checkout">
+    ```bash
+    yitpush checkout
+    ```
+    Interactive branch selection
+  </Card>
+  
+  <Card title="Generate PR description" icon="code-pull-request" href="/commands/pr">
+    ```bash
+    yitpush pr
+    ```
+    AI-generated pull request descriptions
+  </Card>
+</CardGroup>
+
+## Common issues
 
 <AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+  <Accordion title='"DEEPSEEK_API_KEY not found"'>
+    Make sure you've set the environment variable and **restarted your terminal**.
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
+    Verify it's set:
+    ```bash
+    echo $DEEPSEEK_API_KEY  # Linux/macOS
+    echo $env:DEEPSEEK_API_KEY  # Windows PowerShell
+    ```
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+
+  <Accordion title='"Not a git repository"'>
+    Make sure you're running `yitpush` from inside a git repository.
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
+    Initialize one if needed:
+    ```bash
+    git init
+    git remote add origin <your-repo-url>
+    ```
   </Accordion>
-</AccordionGroup>
 
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Accordion title='"git push failed"'>
+    Verify you have:
+    - A remote configured: `git remote -v`
+    - Valid credentials for the remote
+    - Network connectivity
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
+    The tool will prompt you to set upstream if your branch doesn't have one.
   </Accordion>
 </AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
-
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Explore all commands" icon="terminal" href="/commands/commit">
+    Learn about all available commands and options
+  </Card>
+  
+  <Card title="Configuration" icon="gear" href="/guides/configuration">
+    Customize YitPush for your workflow
+  </Card>
+  
+  <Card title="Examples" icon="book" href="/guides/examples">
+    See real-world usage examples
+  </Card>
+  
+  <Card title="Troubleshooting" icon="life-ring" href="/guides/troubleshooting">
+    Get help with common issues
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

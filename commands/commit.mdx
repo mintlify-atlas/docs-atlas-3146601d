@@ -1,0 +1,203 @@
+---
+title: 'yitpush commit'
+description: 'Stage, commit and push changes with an AI-generated message'
+---
+
+The `yitpush commit` command analyzes your git changes, generates a conventional commit message using DeepSeek AI, and automatically pushes to your remote repository.
+
+## Basic usage
+
+```bash
+yitpush commit
+```
+
+This command performs the following steps:
+1. Analyzes all git changes (staged, unstaged, and untracked files)
+2. Generates a conventional commit message using DeepSeek Reasoning AI
+3. Stages all changes with `git add .`
+4. Commits with the generated message
+5. Pushes to the remote repository
+
+## Flags
+
+<ParamField path="--confirm" type="boolean" default="false">
+  Ask for confirmation before committing and pushing. When enabled, you can review the generated message and approve or cancel the operation.
+</ParamField>
+
+<ParamField path="--detailed" type="boolean" default="false">
+  Generate a detailed commit message with title and body. The body includes descriptive paragraphs, bullet points for key changes, and mentions important files modified.
+</ParamField>
+
+<ParamField path="--language" type="string" default="english">
+  Specify the output language for the commit message. Accepts any language name (e.g., `spanish`, `french`, `japanese`). Can be shortened to `--lang`.
+</ParamField>
+
+<ParamField path="--save" type="boolean" default="false">
+  Save the generated commit message to a markdown file. The file is named `commit-message-YYYYMMDD-HHMMSS.md`.
+</ParamField>
+
+## Examples
+
+<Tabs>
+  <Tab title="Basic commit">
+    Automatically commit and push all changes:
+
+    ```bash
+    yitpush commit
+    ```
+
+    Output:
+    ```
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    📊 Analyzing git changes...
+    Found changes (1234 characters)
+
+    🤖 Generating commit message with DeepSeek Reasoning...
+
+    📝 Generated commit message:
+    ╭─ Commit Message ──────────────────────────────╮
+    │ feat: add user authentication with JWT tokens │
+    ╰───────────────────────────────────────────────╯
+    ✅ Copied to clipboard
+
+    ⏩ Proceeding automatically (use --confirm to review)...
+
+    ⚙️  Executing git commands...
+       git add .
+       git commit
+       git push
+
+    ✅ Successfully committed and pushed changes!
+    ```
+  </Tab>
+
+  <Tab title="Review before commit">
+    Review the generated message before committing:
+
+    ```bash
+    yitpush commit --confirm
+    ```
+
+    You'll be prompted:
+    ```
+    Do you want to proceed with this commit? (y/n):
+    ```
+  </Tab>
+
+  <Tab title="Detailed commit">
+    Generate a commit message with title and body:
+
+    ```bash
+    yitpush commit --detailed
+    ```
+
+    Example output:
+    ```
+    📝 Generated commit message:
+    ╭─ Commit Message ──────────────────────────────────╮
+    │ feat: add user authentication with JWT tokens     │
+    │                                                    │
+    │ Implemented a complete authentication system      │
+    │ using JWT tokens for secure user sessions.        │
+    │                                                    │
+    │ Key changes:                                       │
+    │ - Added JWT token generation and validation       │
+    │ - Created authentication middleware               │
+    │ - Implemented login and logout endpoints          │
+    │ - Added token refresh mechanism                   │
+    │                                                    │
+    │ Files modified:                                    │
+    │ - src/auth/jwt.ts                                 │
+    │ - src/middleware/auth.ts                          │
+    │ - src/routes/auth.ts                              │
+    ╰───────────────────────────────────────────────────╯
+    ```
+  </Tab>
+
+  <Tab title="Multi-language">
+    Generate commit messages in any language:
+
+    ```bash
+    # Spanish
+    yitpush commit --language spanish
+
+    # French with detailed mode
+    yitpush commit --lang fr --detailed
+
+    # Japanese with confirmation
+    yitpush commit --language japanese --confirm
+    ```
+  </Tab>
+
+  <Tab title="Save to file">
+    Save the generated message to a file:
+
+    ```bash
+    yitpush commit --save
+    ```
+
+    Output:
+    ```
+    ✅ Commit message saved to: commit-message-20260301-143022.md
+    ```
+  </Tab>
+
+  <Tab title="Combined flags">
+    Use multiple flags together:
+
+    ```bash
+    yitpush commit --detailed --language spanish --confirm --save
+    ```
+  </Tab>
+</Tabs>
+
+## Workflow details
+
+### Change detection
+
+The command analyzes three types of changes:
+- **Staged changes**: Already added with `git add`
+- **Unstaged changes**: Modified tracked files
+- **Untracked files**: New files not yet tracked by git
+
+All changes are combined into a single diff for AI analysis.
+
+### No changes behavior
+
+If there are no changes to commit, the command will attempt to push existing commits:
+
+```bash
+⚠️  No changes detected in the repository.
+
+Will attempt to push existing commits...
+
+⏩ No changes to commit, proceeding with push...
+```
+
+### Upstream branch handling
+
+If your current branch has no upstream remote:
+
+- **Without `--confirm`**: Automatically sets upstream to `origin/<branch-name>`
+- **With `--confirm`**: Prompts you to confirm setting the upstream
+
+<Note>
+  The commit message is automatically copied to your clipboard for easy reuse.
+</Note>
+
+<Warning>
+  Make sure you have set the `DEEPSEEK_API_KEY` environment variable before using this command. See [Configuration](/guides/configuration) for setup instructions.
+</Warning>
+
+## Requirements
+
+- Must be run from within a git repository
+- `DEEPSEEK_API_KEY` environment variable must be set
+- Internet connection required to call the DeepSeek API
+- Git must be installed and configured
+
+## Related commands
+
+- [yitpush checkout](/commands/checkout) - Switch branches interactively
+- [yitpush pr](/commands/pr) - Generate pull request descriptions

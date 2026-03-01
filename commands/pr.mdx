@@ -1,0 +1,277 @@
+---
+title: 'yitpush pr'
+description: 'Generate AI-powered pull request descriptions by comparing branches'
+---
+
+The `yitpush pr` command generates comprehensive pull request descriptions by analyzing the differences between two branches using DeepSeek AI.
+
+## Basic usage
+
+```bash
+yitpush pr
+```
+
+The command will interactively prompt you to:
+1. Select the **source branch** (the branch with your changes)
+2. Select the **target branch** (the branch you want to merge into)
+3. Generate an AI-powered PR description based on the diff
+
+## Flags
+
+<ParamField path="--detailed" type="boolean" default="false">
+  Generate a detailed PR description with multiple sections including summary, detailed changes, files changed, testing suggestions, and notes about breaking changes.
+</ParamField>
+
+<ParamField path="--language" type="string" default="english">
+  Specify the output language for the PR description. Accepts any language name (e.g., `spanish`, `french`, `japanese`). Can be shortened to `--lang`.
+</ParamField>
+
+<ParamField path="--save" type="boolean" default="false">
+  Save the generated PR description to a markdown file. The file is named `pr-description-<source>-to-<target>.md`.
+</ParamField>
+
+## Examples
+
+<Tabs>
+  <Tab title="Basic PR description">
+    Generate a concise PR description:
+
+    ```bash
+    yitpush pr
+    ```
+
+    Interactive workflow:
+    ```
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    📋 PR Description Generator
+
+    🔍 Fetching branches...
+
+    📋 Select source branch (branch with changes):
+    (Select ← Back to return to previous step)
+
+    > feature/user-auth    local    2026-03-01 14:30
+      develop              local    2026-02-28 16:45
+      origin/main          remote   2026-02-27 09:15
+
+    ✅ Source branch: feature/user-auth
+
+    📋 Select target branch (branch to merge into):
+
+    > develop              local    2026-02-28 16:45
+      origin/main          remote   2026-02-27 09:15
+
+    ✅ Target branch: develop
+
+    📊 Analyzing differences between feature/user-auth and develop...
+    Found differences (2847 characters)
+
+    🤖 Generating PR description with DeepSeek Reasoning...
+
+    ╭─ PR Description ──────────────────────────────────╮
+    │ # feat: Add user authentication system            │
+    │                                                    │
+    │ ## Summary                                         │
+    │ Implements JWT-based authentication with login,   │
+    │ logout, and token refresh functionality.          │
+    │                                                    │
+    │ ## Changes                                         │
+    │ - Add JWT token generation and validation         │
+    │ - Create authentication middleware                │
+    │ - Implement login and logout endpoints            │
+    ╰───────────────────────────────────────────────────╯
+
+    ✅ Copied to clipboard
+    ```
+  </Tab>
+
+  <Tab title="Detailed PR description">
+    Generate a comprehensive PR description:
+
+    ```bash
+    yitpush pr --detailed
+    ```
+
+    Output includes:
+    ```markdown
+    # feat: Add user authentication system
+
+    ## Summary
+    Implements a complete JWT-based authentication system for secure user
+    sessions. This includes login, logout, token refresh, and session
+    management capabilities.
+
+    ## Changes
+
+    ### Features
+    - JWT token generation and validation
+    - Authentication middleware for protected routes
+    - Login endpoint with email/password validation
+    - Logout endpoint with token invalidation
+    - Token refresh mechanism for session persistence
+
+    ### Refactoring
+    - Restructured authentication logic into separate modules
+    - Improved error handling in auth flows
+
+    ## Files Changed
+
+    - **src/auth/jwt.ts**: JWT token utilities for signing and verifying tokens
+    - **src/middleware/auth.ts**: Authentication middleware to protect routes
+    - **src/routes/auth.ts**: Login, logout, and refresh endpoints
+    - **src/types/user.ts**: User type definitions for authentication
+    - **tests/auth.test.ts**: Comprehensive authentication tests
+
+    ## Testing
+
+    - Test login with valid credentials
+    - Test login with invalid credentials
+    - Test accessing protected routes with and without tokens
+    - Test token refresh mechanism
+    - Test logout and token invalidation
+
+    ## Notes
+
+    - Requires `JWT_SECRET` environment variable to be set
+    - Token expiration is set to 24 hours by default
+    - Refresh tokens expire after 7 days
+    ```
+  </Tab>
+
+  <Tab title="Multi-language">
+    Generate PR descriptions in any language:
+
+    ```bash
+    # Spanish
+    yitpush pr --language spanish
+
+    # French with detailed mode
+    yitpush pr --lang fr --detailed
+
+    # Japanese
+    yitpush pr --language japanese
+    ```
+  </Tab>
+
+  <Tab title="Save to file">
+    Save the PR description to a markdown file:
+
+    ```bash
+    yitpush pr --save
+    ```
+
+    Output:
+    ```
+    ✅ PR description saved to: pr-description-feature-user-auth-to-develop.md
+    ```
+  </Tab>
+
+  <Tab title="Combined flags">
+    Use multiple flags together:
+
+    ```bash
+    yitpush pr --detailed --language spanish --save
+    ```
+  </Tab>
+</Tabs>
+
+## How it works
+
+### Step 1: Fetch branches
+
+Retrieves all local and remote branches, sorted by last commit date.
+
+### Step 2: Select source branch
+
+Prompts you to select the branch that contains your changes (typically your feature branch).
+
+### Step 3: Select target branch
+
+Prompts you to select the branch you want to merge into (typically `main`, `develop`, or `master`).
+
+### Step 4: Generate diff
+
+Compares the branches using:
+```bash
+git diff <target-branch>...<source-branch>
+```
+
+The `...` syntax (three dots) compares the tip of the source branch with the merge-base of the two branches, showing only the changes introduced in the source branch.
+
+### Step 5: AI analysis
+
+Sends the diff to DeepSeek AI with context about:
+- Commit message style (conventional commits)
+- Markdown formatting requirements
+- The specified detail level
+- The target language
+
+### Step 6: Output
+
+Displays the generated description in a formatted panel and:
+- Copies it to your clipboard
+- Optionally saves it to a file
+
+## PR description format
+
+### Basic mode
+
+Includes:
+- **Title**: Conventional commit style (e.g., `feat: add user authentication`)
+- **Summary**: Brief paragraph explaining the purpose
+- **Changes**: Bullet list of key changes
+
+### Detailed mode
+
+Includes:
+- **Title**: Conventional commit style
+- **Summary**: Comprehensive explanation of the changes
+- **Changes**: Detailed bullet list grouped by category (features, fixes, refactoring, etc.)
+- **Files Changed**: List of key files with descriptions of what changed
+- **Testing**: Suggestions for testing the changes
+- **Notes**: Breaking changes, migration steps, or other important information
+
+<Info>
+  All PR descriptions are generated in Markdown format, ready to paste into GitHub, GitLab, Azure DevOps, or any other platform.
+</Info>
+
+## Navigation
+
+<Note>
+  You can go back at any step by selecting "← Back" from the menu.
+</Note>
+
+If you select "← Back" during:
+- **Source branch selection**: Exits the command
+- **Target branch selection**: Returns to source branch selection
+
+## Requirements
+
+- Must be run from within a git repository
+- `DEEPSEEK_API_KEY` environment variable must be set
+- Internet connection required to call the DeepSeek API
+- At least 2 branches must exist in the repository
+
+## Troubleshooting
+
+**No differences found**
+```
+⚠️  No differences found between the selected branches.
+```
+This means the two branches are identical. Make sure you've committed changes to your source branch.
+
+**Need at least 2 branches**
+```
+❌ Need at least 2 branches to compare.
+```
+Create at least one additional branch to use this command.
+
+<Warning>
+  Make sure you have set the `DEEPSEEK_API_KEY` environment variable before using this command. See [Configuration](/guides/configuration) for setup instructions.
+</Warning>
+
+## Related commands
+
+- [yitpush commit](/commands/commit) - Commit and push changes
+- [yitpush checkout](/commands/checkout) - Switch branches interactively

@@ -1,0 +1,132 @@
+---
+title: Installation
+description: Install YitPush as a global .NET tool in seconds
+---
+
+# Installation
+
+YitPush is distributed as a .NET global tool. Follow these steps to get started.
+
+## Requirements
+
+Before installing YitPush, ensure you have:
+
+<Note>
+  YitPush requires the .NET SDK to be installed on your system. It is cross-platform and works on macOS, Linux, and Windows.
+</Note>
+
+- **.NET SDK** (any recent version)
+- **Git** installed and configured
+- A **DeepSeek API key** (get one at [platform.deepseek.com](https://platform.deepseek.com/))
+
+## Install YitPush
+
+<Steps>
+  <Step title="Install the global tool">
+    Run the following command to install YitPush globally:
+
+    ```bash
+    dotnet tool install --global YitPush
+    ```
+
+    This makes the `yitpush` command available from any directory in your terminal.
+  </Step>
+
+  <Step title="Verify installation">
+    Confirm YitPush is installed correctly:
+
+    ```bash
+    yitpush --help
+    ```
+
+    You should see the YitPush help screen with available commands:
+
+    ```
+    Usage: yitpush <command> [options]
+    ```
+  </Step>
+
+  <Step title="Get your DeepSeek API key">
+    YitPush requires a DeepSeek API key to generate commit messages:
+
+    1. Sign up at [DeepSeek Platform](https://platform.deepseek.com/)
+    2. Navigate to **API Keys** and create a new key
+    3. Copy the key for the next step
+  </Step>
+
+  <Step title="Configure your API key">
+    Set the `DEEPSEEK_API_KEY` environment variable:
+
+    <CodeGroup>
+      ```bash Linux/macOS
+      export DEEPSEEK_API_KEY='your-api-key-here'
+      # Make it permanent
+      echo 'export DEEPSEEK_API_KEY="your-api-key-here"' >> ~/.zshrc
+      ```
+
+      ```powershell Windows (PowerShell)
+      $env:DEEPSEEK_API_KEY='your-api-key-here'
+      # Make it permanent (run as Admin)
+      [System.Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'your-api-key-here', 'User')
+      ```
+    </CodeGroup>
+
+    <Warning>
+      After setting the environment variable, restart your terminal for the changes to take effect.
+    </Warning>
+  </Step>
+</Steps>
+
+## Update YitPush
+
+To update to the latest version:
+
+```bash
+dotnet tool update --global YitPush
+```
+
+## Uninstall
+
+If you need to remove YitPush:
+
+```bash
+dotnet tool uninstall --global YitPush
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Command not found after installation">
+    Make sure the .NET global tools directory is in your PATH. The default locations are:
+    - **Linux/macOS**: `~/.dotnet/tools`
+    - **Windows**: `%USERPROFILE%\.dotnet\tools`
+
+    Add it to your PATH if needed:
+
+    ```bash Linux/macOS
+    export PATH="$PATH:$HOME/.dotnet/tools"
+    ```
+
+    ```powershell Windows
+    $env:PATH += ";$env:USERPROFILE\.dotnet\tools"
+    ```
+  </Accordion>
+
+  <Accordion title="DEEPSEEK_API_KEY not found">
+    Ensure you've set the environment variable correctly and restarted your terminal. You can verify it's set:
+
+    ```bash Linux/macOS
+    echo $DEEPSEEK_API_KEY
+    ```
+
+    ```powershell Windows
+    echo $env:DEEPSEEK_API_KEY
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<Card title="Quickstart guide" icon="rocket" href="/quickstart">
+  Learn how to make your first AI-powered commit in under 2 minutes
+</Card>

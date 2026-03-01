@@ -1,0 +1,391 @@
+---
+title: 'yitpush azure-devops'
+description: 'Manage Azure DevOps repositories and variable groups'
+---
+
+The `yitpush azure-devops` command provides interactive tools for managing Azure DevOps resources, including creating and cloning repositories, and browsing variable groups.
+
+## Requirements
+
+<Warning>
+  This command requires the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) to be installed and configured.
+</Warning>
+
+Before using these commands:
+1. Install Azure CLI from [Microsoft's official site](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+2. Log in to Azure: `az login`
+3. The Azure DevOps extension will be installed automatically if missing
+
+## Subcommands
+
+<CardGroup cols={2}>
+  <Card title="repo new" icon="plus" href="#repo-new">
+    Create a new Azure DevOps repository
+  </Card>
+  <Card title="repo checkout" icon="download" href="#repo-checkout">
+    Clone an existing repository
+  </Card>
+  <Card title="variable-group list" icon="list" href="#variable-group-list">
+    Browse and inspect variable groups
+  </Card>
+</CardGroup>
+
+---
+
+## repo new
+
+Create a new repository in Azure DevOps with interactive prompts.
+
+### Usage
+
+```bash
+yitpush azure-devops repo new
+```
+
+### Workflow example
+
+<Tabs>
+  <Tab title="Full workflow">
+    ```bash
+    $ yitpush azure-devops repo new
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    🔍 Checking Azure CLI...
+    ✅ Azure CLI is installed
+    ✅ Logged into Azure
+
+    🔍 Fetching Azure DevOps organizations...
+    ✅ Found 2 organizations
+
+    📋 Select organization:
+    > MyCompany
+      AnotherOrg
+      ← Back
+
+    ✅ Selected organization: MyCompany
+    Organization URL: https://dev.azure.com/MyCompany
+
+    📋 Select project:
+    > WebApp
+      MobileApp
+      BackendAPI
+      ← Back
+
+    ✅ Selected project: WebApp
+
+    📝 Enter repository name (default: current-directory):
+    > my-new-repo
+
+    ✅ Repository 'my-new-repo' created successfully!
+    Clone URL: https://dev.azure.com/MyCompany/WebApp/_git/my-new-repo
+
+    📋 Select remote name:
+    > azure
+      origin
+      Enter custom name
+      ← Back
+
+    ✅ Remote 'azure' added successfully
+
+    Do you want to push to the new remote? (y/n): y
+
+    ⚙️  Executing git commands...
+       git push azure
+
+    ✅ Successfully pushed to Azure DevOps!
+    ```
+  </Tab>
+
+  <Tab title="With existing git repo">
+    If you're already in a git repository:
+
+    ```bash
+    🔍 Checking git repository...
+    ✅ Already in a git repository
+
+    📝 Enter repository name (default: my-project):
+    >
+
+    # Uses current directory name as default
+    ✅ Repository 'my-project' created successfully!
+    ```
+  </Tab>
+
+  <Tab title="Without git repo">
+    If you're not in a git repository:
+
+    ```bash
+    🔍 Checking git repository...
+    ⚠️  Not a git repository. Initializing...
+
+       git init
+
+    ✅ Git repository initialized
+    ```
+  </Tab>
+</Tabs>
+
+### Features
+
+- **Auto-detection**: Automatically detects Azure DevOps organizations
+- **Smart defaults**: Suggests current directory name as repository name
+- **Git initialization**: Creates a git repository if one doesn't exist
+- **Remote management**: Handles existing remotes (choose `azure`, `origin`, or custom name)
+- **Interactive navigation**: "← Back" option at every step
+- **Windows support**: Automatically detects `az.cmd` on Windows
+
+---
+
+## repo checkout
+
+Clone an existing Azure DevOps repository interactively.
+
+### Usage
+
+```bash
+yitpush azure-devops repo checkout
+```
+
+### Workflow example
+
+<Tabs>
+  <Tab title="Full workflow">
+    ```bash
+    $ yitpush azure-devops repo checkout
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    🔍 Checking Azure CLI...
+    ✅ Azure CLI is installed
+    ✅ Logged into Azure
+
+    🔍 Fetching Azure DevOps organizations...
+    ✅ Found 2 organizations
+
+    📋 Select organization:
+    > MyCompany
+      AnotherOrg
+      ← Back
+
+    ✅ Selected organization: MyCompany
+
+    📋 Select project:
+    > WebApp
+      MobileApp
+      BackendAPI
+      ← Back
+
+    ✅ Selected project: WebApp
+
+    🔍 Fetching repositories...
+    ✅ Found 12 repositories
+
+    📋 Select repository to clone:
+    > frontend-app
+      backend-api
+      mobile-ios
+      mobile-android
+      shared-components
+      ← Back
+
+    ✅ Selected repository: frontend-app
+
+    📁 Enter directory name (default: frontend-app):
+    >
+
+    🔄 Cloning repository...
+       git clone https://dev.azure.com/MyCompany/WebApp/_git/frontend-app
+
+    ✅ Repository cloned successfully!
+    📂 Location: /home/user/frontend-app
+    ```
+  </Tab>
+
+  <Tab title="Custom directory name">
+    Specify a custom directory name for the clone:
+
+    ```bash
+    📁 Enter directory name (default: frontend-app):
+    > my-custom-folder
+
+    🔄 Cloning repository...
+       git clone https://dev.azure.com/MyCompany/WebApp/_git/frontend-app my-custom-folder
+
+    ✅ Repository cloned successfully!
+    📂 Location: /home/user/my-custom-folder
+    ```
+  </Tab>
+</Tabs>
+
+### Features
+
+- **Repository list**: Displays all repositories in the selected project
+- **Custom directory**: Optionally specify a different directory name
+- **Full git clone**: Uses standard `git clone` with HTTPS URLs
+- **Interactive navigation**: "← Back" option at every step
+
+---
+
+## variable-group list
+
+Browse and inspect Azure DevOps variable groups and their variables.
+
+### Usage
+
+```bash
+yitpush azure-devops variable-group list
+```
+
+### Workflow example
+
+<Tabs>
+  <Tab title="Full workflow">
+    ```bash
+    $ yitpush azure-devops variable-group list
+    🚀 YitPush - AI-Powered Git Commit Tool
+
+    🔍 Checking Azure CLI...
+    ✅ Azure CLI is installed
+    ✅ Logged into Azure
+
+    🔍 Fetching Azure DevOps organizations...
+    ✅ Found 2 organizations
+
+    📋 Select organization:
+    > MyCompany
+      AnotherOrg
+      ← Back
+
+    ✅ Selected organization: MyCompany
+
+    📋 Select project:
+    > WebApp
+      MobileApp
+      BackendAPI
+      ← Back
+
+    ✅ Selected project: WebApp
+
+    🔍 Fetching variable groups...
+    ✅ Found 8 variable groups
+
+    📋 Select variable group:
+    > Production-Config
+      Staging-Config
+      Development-Config
+      Secrets-Production
+      API-Keys
+      Database-Connections
+      ← Back
+
+    ✅ Selected: Production-Config
+
+    📋 Variables in 'Production-Config':
+
+    ╭─────────────────────────────────────────────╮
+    │ Name                Value                    │
+    ├─────────────────────────────────────────────┤
+    │ API_URL             https://api.prod.com     │
+    │ APP_VERSION         2.1.4                    │
+    │ CACHE_TIMEOUT       3600                     │
+    │ DATABASE_HOST       prod-db.example.com     │
+    │ LOG_LEVEL           info                     │
+    │ MAX_CONNECTIONS     100                      │
+    ╰─────────────────────────────────────────────╯
+
+    📋 Select variable group:
+    (Select ← Back to return to project selection)
+    ```
+  </Tab>
+
+  <Tab title="Secret variables">
+    Secret variables are displayed differently:
+
+    ```bash
+    📋 Variables in 'Secrets-Production':
+
+    ╭─────────────────────────────────────────────╮
+    │ Name                Value                    │
+    ├─────────────────────────────────────────────┤
+    │ API_KEY             [secret]                 │
+    │ DATABASE_PASSWORD   [secret]                 │
+    │ JWT_SECRET          [secret]                 │
+    │ ENCRYPTION_KEY      [secret]                 │
+    ╰─────────────────────────────────────────────╯
+    ```
+
+    <Info>
+      Secret values are not displayed for security reasons. They appear as `[secret]` in the listing.
+    </Info>
+  </Tab>
+</Tabs>
+
+### Features
+
+- **Browse multiple groups**: View variables from multiple groups in one session
+- **Secret handling**: Automatically hides secret variable values
+- **Formatted display**: Clean table view of all variables
+- **Interactive navigation**: Return to group selection to browse another group
+
+---
+
+## Platform support
+
+<Info>
+  **Windows users**: YitPush automatically detects and uses `az.cmd` on Windows systems. No additional configuration is needed.
+</Info>
+
+The command works on:
+- **macOS**: Uses `az` command directly
+- **Linux**: Uses `az` command directly  
+- **Windows**: Automatically uses `cmd.exe /c az` to invoke `az.cmd`
+
+## Troubleshooting
+
+### Azure CLI not installed
+
+```
+❌ Azure CLI (az) is not installed.
+Please install it from: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+```
+
+**Solution**: Install the Azure CLI from Microsoft's official website.
+
+### Not logged in to Azure
+
+```
+❌ Please log in to Azure CLI first.
+Run: az login
+```
+
+**Solution**: Run `az login` and complete the authentication flow.
+
+### No organizations found
+
+```
+⚠️  No organizations found.
+Please enter your Azure DevOps organization name manually:
+>
+```
+
+**Solution**: If auto-detection fails, you can manually enter your organization name (e.g., `MyCompany` for `https://dev.azure.com/MyCompany`).
+
+### No repositories found
+
+```
+❌ No repositories found in project 'WebApp'.
+```
+
+**Solution**: Verify the selected project contains repositories or has the correct permissions.
+
+### No variable groups found
+
+```
+❌ No variable groups found in project 'WebApp'.
+```
+
+**Solution**: Verify the project has variable groups configured or check your permissions.
+
+## Related commands
+
+- [yitpush commit](/commands/commit) - Commit and push to Azure Repos
+- [yitpush checkout](/commands/checkout) - Switch between Azure DevOps branches

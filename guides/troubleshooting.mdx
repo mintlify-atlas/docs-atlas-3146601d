@@ -1,0 +1,468 @@
+---
+title: Troubleshooting
+description: Solutions to common issues and error messages in YitPush
+---
+
+This guide helps you resolve common issues when using YitPush. If you encounter an error not listed here, please [open an issue on GitHub](https://github.com/elvisbrevi/YitPush/issues).
+
+## API key issues
+
+<AccordionGroup>
+  <Accordion title="❌ DEEPSEEK_API_KEY not found">
+    **Error message:**
+    ```
+    ❌ Error: DEEPSEEK_API_KEY environment variable not found.
+    
+    Please set your DeepSeek API key:
+      export DEEPSEEK_API_KEY='your-api-key-here'
+    ```
+    
+    **Cause:**
+    The `DEEPSEEK_API_KEY` environment variable is not set in your current session.
+    
+    **Solution:**
+    
+    <Steps>
+      <Step title="Set the environment variable">
+        Follow the configuration guide to set your API key:
+        
+        **Linux/macOS:**
+        ```bash
+        export DEEPSEEK_API_KEY='your-api-key-here'
+        echo 'export DEEPSEEK_API_KEY="your-api-key-here"' >> ~/.zshrc
+        ```
+        
+        **Windows (PowerShell):**
+        ```powershell
+        [System.Environment]::SetEnvironmentVariable('DEEPSEEK_API_KEY', 'your-api-key-here', 'User')
+        ```
+      </Step>
+      
+      <Step title="Restart your terminal">
+        Close and reopen your terminal to load the new environment variable.
+      </Step>
+      
+      <Step title="Verify the setup">
+        Check that the variable is set:
+        ```bash
+        echo $DEEPSEEK_API_KEY  # Linux/macOS
+        $env:DEEPSEEK_API_KEY   # Windows PowerShell
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+  
+  <Accordion title="❌ Failed to generate commit message">
+    **Error message:**
+    ```
+    ❌ Error: Failed to generate commit message.
+    ```
+    
+    **Possible causes:**
+    - Invalid or expired API key
+    - Network connectivity issues
+    - DeepSeek API is temporarily unavailable
+    - API rate limit exceeded
+    
+    **Solutions:**
+    
+    <Steps>
+      <Step title="Verify API key">
+        Check that your API key is valid:
+        1. Log in to [DeepSeek Platform](https://platform.deepseek.com/)
+        2. Go to API Keys section
+        3. Verify your key is active and not expired
+        4. If needed, generate a new key and update your environment variable
+      </Step>
+      
+      <Step title="Check internet connection">
+        Ensure you have an active internet connection and can reach `https://api.deepseek.com`:
+        ```bash
+        curl -I https://api.deepseek.com
+        ```
+      </Step>
+      
+      <Step title="Check API status">
+        Visit the DeepSeek platform to check if there are any service outages or maintenance windows.
+      </Step>
+      
+      <Step title="Wait and retry">
+        If you've hit a rate limit, wait a few minutes and try again. YitPush automatically retries failed requests up to 3 times with exponential backoff.
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>
+
+## Git repository issues
+
+<AccordionGroup>
+  <Accordion title="❌ Not a git repository">
+    **Error message:**
+    ```
+    ❌ Error: Not a git repository.
+    
+    Please run this command from within a git repository.
+    ```
+    
+    **Cause:**
+    You're running YitPush in a directory that is not a git repository.
+    
+    **Solution:**
+    
+    <Steps>
+      <Step title="Navigate to your git repository">
+        Change to a directory that contains a git repository:
+        ```bash
+        cd /path/to/your/git/repo
+        ```
+      </Step>
+      
+      <Step title="Or initialize a new repository">
+        If you want to start a new git repository:
+        ```bash
+        git init
+        ```
+      </Step>
+      
+      <Step title="Verify git is initialized">
+        Check that git is properly set up:
+        ```bash
+        git status
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+  
+  <Accordion title="❌ git add failed">
+    **Error message:**
+    ```
+    ❌ Error: git add failed.
+    ```
+    
+    **Possible causes:**
+    - File permissions issues
+    - Corrupted git index
+    - Locked index file
+    
+    **Solutions:**
+    
+    <Steps>
+      <Step title="Check file permissions">
+        Ensure you have write permissions to the repository:
+        ```bash
+        ls -la .git/
+        ```
+      </Step>
+      
+      <Step title="Remove lock file if present">
+        If the git index is locked:
+        ```bash
+        rm -f .git/index.lock
+        ```
+      </Step>
+      
+      <Step title="Try manual add">
+        Test adding files manually to identify the issue:
+        ```bash
+        git add .
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+  
+  <Accordion title="❌ git commit failed">
+    **Error message:**
+    ```
+    ❌ Error: git commit failed.
+    ```
+    
+    **Possible causes:**
+    - No changes staged
+    - Git hooks failing
+    - Git user name/email not configured
+    
+    **Solutions:**
+    
+    <Steps>
+      <Step title="Configure git identity">
+        Ensure your git user name and email are set:
+        ```bash
+        git config --global user.name "Your Name"
+        git config --global user.email "your.email@example.com"
+        ```
+      </Step>
+      
+      <Step title="Check for pre-commit hooks">
+        If you have pre-commit hooks that are failing, review their output:
+        ```bash
+        git commit -m "test"
+        ```
+      </Step>
+      
+      <Step title="Verify staged changes">
+        Check that you have changes to commit:
+        ```bash
+        git status
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>
+
+## Push issues
+
+<AccordionGroup>
+  <Accordion title="❌ git push failed">
+    **Error message:**
+    ```
+    ❌ git push failed
+    ```
+    
+    **Possible causes:**
+    - No remote configured
+    - Authentication failed
+    - No upstream branch set
+    - Network issues
+    
+    **Solutions:**
+    
+    <Steps>
+      <Step title="Check remote configuration">
+        Verify that a remote is configured:
+        ```bash
+        git remote -v
+        ```
+        
+        If no remote exists, add one:
+        ```bash
+        git remote add origin <your-repo-url>
+        ```
+      </Step>
+      
+      <Step title="Set upstream branch">
+        If the error mentions "no upstream branch":
+        ```bash
+        git push --set-upstream origin <branch-name>
+        ```
+        
+        <Note>
+          YitPush automatically handles this in most cases, but you may need to do it manually if using `--confirm` mode.
+        </Note>
+      </Step>
+      
+      <Step title="Check authentication">
+        Ensure your git credentials are configured:
+        - For HTTPS: Check your credential helper
+        - For SSH: Verify your SSH keys are added
+        ```bash
+        ssh -T git@github.com  # For GitHub
+        ```
+      </Step>
+      
+      <Step title="Pull before push">
+        If the remote has changes you don't have locally:
+        ```bash
+        git pull --rebase
+        yitpush commit
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+  
+  <Accordion title="⚠️ The current branch has no upstream branch">
+    **Warning message:**
+    ```
+    The current branch 'feature-branch' has no upstream branch.
+    Do you want to push and set upstream to origin/feature-branch? (y/n):
+    ```
+    
+    **Cause:**
+    You're on a new branch that hasn't been pushed to the remote yet.
+    
+    **Solution:**
+    
+    When using `--confirm` mode, YitPush will ask if you want to set the upstream branch. Type `y` to proceed.
+    
+    In automatic mode (without `--confirm`), YitPush sets the upstream branch automatically.
+  </Accordion>
+</AccordionGroup>
+
+## Azure DevOps issues
+
+<AccordionGroup>
+  <Accordion title="❌ Azure CLI (az) is not installed">
+    **Error message:**
+    ```
+    ❌ Azure CLI (az) is not installed.
+    ```
+    
+    **Cause:**
+    The Azure CLI is not installed on your system.
+    
+    **Solution:**
+    
+    Install the Azure CLI following the [official installation guide](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli):
+    
+    **Linux:**
+    ```bash
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    ```
+    
+    **macOS:**
+    ```bash
+    brew install azure-cli
+    ```
+    
+    **Windows:**
+    Download and run the [MSI installer](https://aka.ms/installazurecliwindows).
+    
+    After installation, log in:
+    ```bash
+    az login
+    ```
+  </Accordion>
+  
+  <Accordion title="⚠️ No organizations found">
+    **Warning message:**
+    ```
+    ⚠️ No organizations found.
+    ```
+    
+    **Cause:**
+    YitPush couldn't auto-detect your Azure DevOps organizations.
+    
+    **Solution:**
+    
+    When prompted, enter your organization name manually. Your organization URL is typically:
+    ```
+    https://dev.azure.com/your-organization-name
+    ```
+    
+    Use just the organization name (e.g., `your-organization-name`) when prompted.
+  </Accordion>
+  
+  <Accordion title="❌ No repositories found">
+    **Error message:**
+    ```
+    ❌ No repositories found.
+    ```
+    
+    **Cause:**
+    The selected Azure DevOps project has no repositories.
+    
+    **Solution:**
+    
+    1. Verify you selected the correct project
+    2. Check that the project has repositories in the Azure DevOps web interface
+    3. Ensure you have permissions to view repositories in the project
+    4. Use `yitpush azure-devops repo new` to create a new repository
+  </Accordion>
+  
+  <Accordion title="Windows: az command not found">
+    **Issue:**
+    On Windows, you might see errors about `az` not being found even though Azure CLI is installed.
+    
+    **Cause:**
+    Windows uses `az.cmd` instead of `az`.
+    
+    **Solution:**
+    
+    YitPush automatically detects Windows and uses `cmd.exe /c az` to find `az.cmd`. If this doesn't work:
+    
+    1. Verify Azure CLI is in your PATH:
+    ```powershell
+    where.exe az
+    ```
+    
+    2. Try running `az.cmd` directly:
+    ```powershell
+    az.cmd --version
+    ```
+    
+    3. If needed, add the Azure CLI installation directory to your PATH.
+  </Accordion>
+</AccordionGroup>
+
+## Other common issues
+
+<AccordionGroup>
+  <Accordion title="⚠️ No changes detected in the repository">
+    **Warning message:**
+    ```
+    ⚠️ No changes detected in the repository.
+    
+    Will attempt to push existing commits...
+    ```
+    
+    **Cause:**
+    There are no unstaged or untracked changes in your repository.
+    
+    **What happens:**
+    YitPush will skip the commit step and attempt to push any existing commits to the remote.
+    
+    **Solution:**
+    
+    This is not an error. If you expected to have changes:
+    1. Check git status: `git status`
+    2. Verify your changes are saved
+    3. Make sure files aren't in `.gitignore`
+  </Accordion>
+  
+  <Accordion title="⚠️ Diff is too large, truncating...">
+    **Warning message:**
+    ```
+    ⚠️ Diff is too large (500000 chars). Truncating to 345000 chars...
+    ```
+    
+    **Cause:**
+    Your git diff exceeds the maximum context size for the AI model.
+    
+    **What happens:**
+    YitPush automatically truncates the diff, keeping the beginning and end portions while omitting the middle.
+    
+    **Impact:**
+    The generated commit message may be less accurate for very large changesets.
+    
+    **Solution:**
+    
+    For very large changes, consider:
+    1. Breaking changes into smaller commits
+    2. Committing files in logical groups
+    3. Using `.gitignore` to exclude generated files
+  </Accordion>
+  
+  <Accordion title="⚠️ Could not copy to clipboard">
+    **Warning message:**
+    ```
+    ⚠️ Could not copy to clipboard: [error details]
+    ```
+    
+    **Cause:**
+    YitPush couldn't access the system clipboard.
+    
+    **Impact:**
+    This doesn't affect the commit process. The message is still displayed and used for committing.
+    
+    **Solution:**
+    
+    This is typically a non-critical issue. The commit will still succeed. If you need clipboard functionality:
+    - On Linux, ensure `xclip` or `xsel` is installed
+    - Check clipboard access permissions
+  </Accordion>
+</AccordionGroup>
+
+## Getting help
+
+If you're still experiencing issues:
+
+1. Check the [GitHub Issues](https://github.com/elvisbrevi/YitPush/issues) for similar problems
+2. Review the [DeepSeek API documentation](https://api-docs.deepseek.com/) for API-related issues
+3. Open a new issue with:
+   - Your operating system and version
+   - YitPush version (`dotnet tool list -g | grep YitPush`)
+   - The full error message
+   - Steps to reproduce the issue
+
+<Note>
+  Remember to remove sensitive information (API keys, repository URLs, etc.) before sharing error messages publicly.
+</Note>
