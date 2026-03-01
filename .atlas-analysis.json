@@ -1,0 +1,61 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "YitPush",
+  "projectDescription": "AI-powered Git commit tool that automates the entire git workflow with DeepSeek's reasoning model",
+  "theme": "aspen",
+  "primaryColor": "#06B6D4",
+  "lightColor": "#22D3EE",
+  "darkColor": "#0E7490",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction",
+          "installation",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Commands",
+        "pages": [
+          "commands/commit",
+          "commands/checkout",
+          "commands/pr",
+          "commands/azure-devops"
+        ]
+      },
+      {
+        "group": "Guides",
+        "pages": [
+          "guides/configuration",
+          "guides/examples",
+          "guides/troubleshooting"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "AI-powered commit message generation with DeepSeek reasoning model",
+    "Multi-language commit messages support",
+    "Interactive branch checkout with remote branch tracking",
+    "AI-generated pull request descriptions",
+    "Azure DevOps integration for repo and variable group management",
+    "Detailed and simple commit modes",
+    "Automated git workflow (add, commit, push)"
+  ],
+  "publicApiSurface": [
+    "yitpush commit",
+    "yitpush commit --confirm",
+    "yitpush commit --detailed",
+    "yitpush commit --language <lang>",
+    "yitpush commit --save",
+    "yitpush checkout",
+    "yitpush pr",
+    "yitpush pr --detailed",
+    "yitpush pr --save",
+    "yitpush azure-devops repo new",
+    "yitpush azure-devops repo checkout",
+    "yitpush azure-devops variable-group list"
+  ]
+}
